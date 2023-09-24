@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI-ML</title>
+</head>
+<body>
+
+
+			<!-- 1st program -->
+
+
+  <button onclick="copyCode1()">1st prgm</button>
+
+  <script>
+    function copyCode1() {
+      var code = `"""Implement A* search algorithm"""
+
+def aStarAlgo(start_node, stop_node):
+    open_set = set(start_node)
+    closed_set = set()
+    g = {}
+    parents = {}
+
+    g[start_node] = 0
+    parents[start_node] = start_node
+    while len(open_set) > 0:
+        n = None
+        for v in open_set:
+            if n == None or g[v] + heuristic(v) < g[n] + heuristic(n):
+                n = v
+        if n == stop_node or Graph_nodes[n] is None:
+            pass
+        else:
+            for (m, weight) in get_neighbours(n):
+                if m not in open_set and m not in closed_set:
+                    open_set.add(m)
+                    parents[m] = n
+                    g[m] = g[n] + weight
+                else:
+                    if g[m] > g[n] + weight:
+                        g[m] = g[n] + weight
+                        parents[m] = n
+                    if m in closed_set:
+                        closed_set.remove(m)
+                        open_set.add(m)
+        if n is None:
+            print('path does not exist!')
+            return None
+        if n == stop_node:
+            path = []
+            while parents[n] != n:
+                path.append(n)
+                n = parents[n]
+            path.append(start_node)
+            path.reverse()
+            print('path found: {}'.format(path))
+            return path
+        open_set.remove(n)
+        closed_set.add(n)
+    print('path does not exist!')
+    return None
+
+
+def get_neighbours(v):
+    if v in Graph_nodes:
+        return Graph_nodes[v]
+    else:
+        return None
+
+
+def heuristic(n):
+    H_dist = {
+        'A': 10,
+        'B': 8,
+        'C': 5,
+        'D': 7,
+        'E': 3,
+        'F': 6,
+        'G': 5,
+        'H': 3,
+        'I': 1,
+        'J': 0
+    }
+    return H_dist[n]
+
+
+Graph_nodes = {
+    'A': [('B', 6), ('F', 3)],
+    'B': [('C', 3), ('D', 2)],
+    'C': [('D', 1), ('E', 5)],
+    'D': [('C', 1), ('E', 8)],
+    'E': [('I', 5), ('J', 5)],
+    'F': [('G', 1), ('H', 7)],
+    'G': [('I', 3)],
+    'H': [('I', 2)],
+    'I': [('E', 5), ('J', 3)]
+}
+
+aStarAlgo('A', 'J')
+
+########################################################################################################################
+# OUTPUT:
+# Ignore single quotes at beginning and end
+########################################################################################################################
+
+'''
+path found: ['A', 'F', 'G', 'I', 'J']
+'''`
+function myFunction() {
+};
+
+      var tempInput = document.createElement("textarea");
+      tempInput.value = code;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Done with 1st prgm!!");
+    }
+  </script>
+  
+  
+  
+						<!-- 2nd program -->
+  
+  
+   <button onclick="copyCode2()">2nd prgm</button>
+
+  <script>
+    function copyCode2() {
+      var code = `"""Recursive implementation of AO* algorithm"""
+
+
+class Graph:
+    def __init__(self, graph, heuristicNodeList, startNode):  # instantiate graph object with graph topology,
+        # heuristic values, start node
+
+        self.graph = graph
+        self.H = heuristicNodeList
+        self.start = startNode
+        self.parent = {}
+        self.status = {}
+        self.solutionGraph = {}
+
+    def applyAOStar(self):  # starts a recursive AO* algorithm
+        self.aoStar(self.start, False)
+
+    def getNeighbors(self, v):  # gets the Neighbors of a given node
+        return self.graph.get(v, '')
+
+    def getStatus(self, v):  # return the status of a given node
+        return self.status.get(v, 0)
+
+    def setStatus(self, v, val):  # set the status of a given node
+        self.status[v] = val
+
+    def getHeuristicNodeValue(self, n):
+        return self.H.get(n, 0)  # always return the heuristic value of a given node
+
+    def setHeuristicNodeValue(self, n, value):
+        self.H[n] = value  # set the revised heuristic value of a given node
+
+    def printSolution(self):
+        print("FOR GRAPH SOLUTION, TRAVERSE THE GRAPH FROM THE START NODE:", self.start)
+        print("------------------------------------------------------------")
+        print(self.solutionGraph)
+        print("------------------------------------------------------------")
+
+    def computeMinimumCostChildNodes(self, v):  # Computes the Minimum Cost of child nodes of a given node v
+        minimumCost = 0
+        costToChildNodeListDict = {}
+        costToChildNodeListDict[minimumCost] = []
+        flag = True
+        for nodeInfoTupleList in self.getNeighbors(v):  # iterate over all the set of child node/s
+            cost = 0
+            nodeList = []
+            for c, weight in nodeInfoTupleList:
+                cost = cost + self.getHeuristicNodeValue(c) + weight
+                nodeList.append(c)
+
+            if flag == True:  # initialize Minimum Cost with the cost of first set of child node/s
+                minimumCost = cost
+                costToChildNodeListDict[minimumCost] = nodeList  # set the Minimum Cost child node/s
+                flag = False
+            else:  # checking the Minimum Cost nodes with the current Minimum Cost
+                if minimumCost > cost:
+                    minimumCost = cost
+                    costToChildNodeListDict[minimumCost] = nodeList  # set the Minimum Cost child node/s
+
+        return minimumCost, costToChildNodeListDict[minimumCost]  # return Minimum Cost and Minimum Cost child node/s
+
+    def aoStar(self, v, backTracking):  # AO* algorithm for a start node and backTracking status flag
+
+        print("HEURISTIC VALUES  :", self.H)
+        print("SOLUTION GRAPH    :", self.solutionGraph)
+        print("PROCESSING NODE   :", v)
+        print("-----------------------------------------------------------------------------------------")
+
+        if self.getStatus(v) >= 0:  # if status node v >= 0, compute Minimum Cost nodes of v
+            minimumCost, childNodeList = self.computeMinimumCostChildNodes(v)
+            self.setHeuristicNodeValue(v, minimumCost)
+            self.setStatus(v, len(childNodeList))
+
+            solved = True  # check the Minimum Cost nodes of v are solved
+            for childNode in childNodeList:
+                self.parent[childNode] = v
+                if self.getStatus(childNode) != -1:
+                    solved = solved & False
+
+            if solved == True:  # if the Minimum Cost nodes of v are solved, set the current node status as solved(-1)
+                self.setStatus(v, -1)
+                self.solutionGraph[
+                    v] = childNodeList  # update the solution graph with the solved nodes which may be a part of
+                # solution
+
+            if v != self.start:  # check the current node is the start node for backtracking the current node value
+                self.aoStar(self.parent[v],
+                            True)  # backtracking the current node value with backtracking status set to true
+
+            if not backTracking:  # check the current call is not for backtracking
+                for childNode in childNodeList:  # for each Minimum Cost child node
+                    self.setStatus(childNode, 0)  # set the status of child node to 0(needs exploration)
+                    self.aoStar(childNode,
+                                False)  # Minimum Cost child node is further explored with backtracking status as false
+
+
+h1 = {'A': 1, 'B': 6, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 5, 'H': 7, 'I': 7, 'J': 1, 'T': 3}
+graph1 = {
+    'A': [[('B', 1), ('C', 1)], [('D', 1)]],
+    'B': [[('G', 1)], [('H', 1)]],
+    'C': [[('J', 1)]],
+    'D': [[('E', 1), ('F', 1)]],
+    'G': [[('I', 1)]]
+}
+G1 = Graph(graph1, h1, 'A')
+G1.applyAOStar()
+G1.printSolution()
+
+h2 = {'A': 1, 'B': 6, 'C': 12, 'D': 10, 'E': 4, 'F': 4, 'G': 5, 'H': 7}  # Heuristic values of Nodes
+graph2 = {  # Graph of Nodes and Edges
+    'A': [[('B', 1), ('C', 1)], [('D', 1)]],  # Neighbors of Node 'A', B, C & D with respective weights
+    'B': [[('G', 1)], [('H', 1)]],  # Neighbors are included in a list of lists
+    'D': [[('E', 1), ('F', 1)]]  # Each sublist indicate a "OR" node or "AND" nodes
+}
+
+G2 = Graph(graph2, h2, 'A')  # Instantiate Graph object with graph, heuristic values and start Node
+G2.applyAOStar()  # Run the AO* algorithm
+G2.printSolution()  # Print the solution graph as output of the AO* algorithm search
+
+########################################################################################################################
+# OUTPUT:
+# Ignore single quotes at beginning and end
+########################################################################################################################
+'''
+HEURISTIC VALUES  : {'A': 1, 'B': 6, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 5, 'H': 7, 'I': 7, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {}
+PROCESSING NODE   : A
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 10, 'B': 6, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 5, 'H': 7, 'I': 7, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {}
+PROCESSING NODE   : B
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 10, 'B': 6, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 5, 'H': 7, 'I': 7, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {}
+PROCESSING NODE   : A
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 10, 'B': 6, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 5, 'H': 7, 'I': 7, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {}
+PROCESSING NODE   : G
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 10, 'B': 6, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 8, 'H': 7, 'I': 7, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {}
+PROCESSING NODE   : B
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 10, 'B': 8, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 8, 'H': 7, 'I': 7, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {}
+PROCESSING NODE   : A
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 12, 'B': 8, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 8, 'H': 7, 'I': 7, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {}
+PROCESSING NODE   : I
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 12, 'B': 8, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 8, 'H': 7, 'I': 0, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {'I': []}
+PROCESSING NODE   : G
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 12, 'B': 8, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 1, 'H': 7, 'I': 0, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {'I': [], 'G': ['I']}
+PROCESSING NODE   : B
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 12, 'B': 2, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 1, 'H': 7, 'I': 0, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {'I': [], 'G': ['I'], 'B': ['G']}
+PROCESSING NODE   : A
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 6, 'B': 2, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 1, 'H': 7, 'I': 0, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {'I': [], 'G': ['I'], 'B': ['G']}
+PROCESSING NODE   : C
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 6, 'B': 2, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 1, 'H': 7, 'I': 0, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {'I': [], 'G': ['I'], 'B': ['G']}
+PROCESSING NODE   : A
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 6, 'B': 2, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 1, 'H': 7, 'I': 0, 'J': 1, 'T': 3}
+SOLUTION GRAPH    : {'I': [], 'G': ['I'], 'B': ['G']}
+PROCESSING NODE   : J
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 6, 'B': 2, 'C': 2, 'D': 12, 'E': 2, 'F': 1, 'G': 1, 'H': 7, 'I': 0, 'J': 0, 'T': 3}
+SOLUTION GRAPH    : {'I': [], 'G': ['I'], 'B': ['G'], 'J': []}
+PROCESSING NODE   : C
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 6, 'B': 2, 'C': 1, 'D': 12, 'E': 2, 'F': 1, 'G': 1, 'H': 7, 'I': 0, 'J': 0, 'T': 3}
+SOLUTION GRAPH    : {'I': [], 'G': ['I'], 'B': ['G'], 'J': [], 'C': ['J']}
+PROCESSING NODE   : A
+-----------------------------------------------------------------------------------------
+FOR GRAPH SOLUTION, TRAVERSE THE GRAPH FROM THE START NODE: A
+------------------------------------------------------------
+{'I': [], 'G': ['I'], 'B': ['G'], 'J': [], 'C': ['J'], 'A': ['B', 'C']}
+------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 1, 'B': 6, 'C': 12, 'D': 10, 'E': 4, 'F': 4, 'G': 5, 'H': 7}
+SOLUTION GRAPH    : {}
+PROCESSING NODE   : A
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 11, 'B': 6, 'C': 12, 'D': 10, 'E': 4, 'F': 4, 'G': 5, 'H': 7}
+SOLUTION GRAPH    : {}
+PROCESSING NODE   : D
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 11, 'B': 6, 'C': 12, 'D': 10, 'E': 4, 'F': 4, 'G': 5, 'H': 7}
+SOLUTION GRAPH    : {}
+PROCESSING NODE   : A
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 11, 'B': 6, 'C': 12, 'D': 10, 'E': 4, 'F': 4, 'G': 5, 'H': 7}
+SOLUTION GRAPH    : {}
+PROCESSING NODE   : E
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 11, 'B': 6, 'C': 12, 'D': 10, 'E': 0, 'F': 4, 'G': 5, 'H': 7}
+SOLUTION GRAPH    : {'E': []}
+PROCESSING NODE   : D
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 11, 'B': 6, 'C': 12, 'D': 6, 'E': 0, 'F': 4, 'G': 5, 'H': 7}
+SOLUTION GRAPH    : {'E': []}
+PROCESSING NODE   : A
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 7, 'B': 6, 'C': 12, 'D': 6, 'E': 0, 'F': 4, 'G': 5, 'H': 7}
+SOLUTION GRAPH    : {'E': []}
+PROCESSING NODE   : F
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 7, 'B': 6, 'C': 12, 'D': 6, 'E': 0, 'F': 0, 'G': 5, 'H': 7}
+SOLUTION GRAPH    : {'E': [], 'F': []}
+PROCESSING NODE   : D
+-----------------------------------------------------------------------------------------
+HEURISTIC VALUES  : {'A': 7, 'B': 6, 'C': 12, 'D': 2, 'E': 0, 'F': 0, 'G': 5, 'H': 7}
+SOLUTION GRAPH    : {'E': [], 'F': [], 'D': ['E', 'F']}
+PROCESSING NODE   : A
+-----------------------------------------------------------------------------------------
+FOR GRAPH SOLUTION, TRAVERSE THE GRAPH FROM THE START NODE: A
+------------------------------------------------------------
+{'E': [], 'F': [], 'D': ['E', 'F'], 'A': ['D']}
+------------------------------------------------------------
+'''`
+function myFunction() {
+};
+
+      var tempInput = document.createElement("textarea");
+      tempInput.value = code;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Done with 2nd prgm!!");
+    }
+  </script>
+  
+  
+						<!-- 3rd program -->
+  
+  
+  
+  <button onclick="copyCode3()">3rd prgm</button>
+
+  <script>
+    function copyCode3() {
+      var code = `""" For a given set of training data examples stored in a .CSV file, implement and demonstrate the
+candidate-Elimination algorithm output a description of the set of all hypotheses consistent with the training
+examples """
+
+import csv
+
+with open("CandidateElimination.csv") as f:
+    csv_file = csv.reader(f)
+    data = list(csv_file)
+
+    s = data[1][:-1]
+    g = [['?' for i in range(len(s))] for j in range(len(s))]
+
+    for i in data:
+        if i[-1] == "Yes":
+            for j in range(len(s)):
+                if i[j] != s[j]:
+                    s[j] = '?'
+                    g[j][j] = '?'
+
+        elif i[-1] == "No":
+            for j in range(len(s)):
+                if i[j] != s[j]:
+                    g[j][j] = s[j]
+                else:
+                    g[j][j] = "?"
+        print("\nSteps of Candidate Elimination Algorithm", data.index(i) + 1)
+        print(s)
+        print(g)
+    gh = []
+    for i in g:
+        for j in i:
+            if j != '?':
+                gh.append(i)
+                break
+    print("\nFinal specific hypothesis:\n", s)
+
+    print("\nFinal general hypothesis:\n", gh)
+
+########################################################################################################################
+# OUTPUT:
+# Ignore single quotes at beginning and end
+########################################################################################################################
+
+'''
+Steps of Candidate Elimination Algorithm 1 ['Sunny', 'Warm', 'Normal', 'Strong', 'Warm', 'Same'] [['?', '?', '?', 
+'?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', 
+'?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?']] 
+
+Steps of Candidate Elimination Algorithm 2 ['Sunny', 'Warm', 'Normal', 'Strong', 'Warm', 'Same'] [['?', '?', '?', 
+'?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', 
+'?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?']] 
+
+Steps of Candidate Elimination Algorithm 3 ['Sunny', 'Warm', '?', 'Strong', 'Warm', 'Same'] [['?', '?', '?', '?', 
+'?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', 
+'?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?']] 
+
+Steps of Candidate Elimination Algorithm 4 ['Sunny', 'Warm', '?', 'Strong', 'Warm', 'Same'] [['Sunny', '?', '?', '?', 
+'?', '?'], ['?', 'Warm', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', 
+'?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', 'Same']] 
+
+Steps of Candidate Elimination Algorithm 5 ['Sunny', 'Warm', '?', 'Strong', '?', '?'] [['Sunny', '?', '?', '?', '?', 
+'?'], ['?', 'Warm', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?'], ['?', '?', 
+'?', '?', '?', '?'], ['?', '?', '?', '?', '?', '?']] 
+
+Final specific hypothesis:
+ ['Sunny', 'Warm', '?', 'Strong', '?', '?']
+
+Final general hypothesis:
+ [['Sunny', '?', '?', '?', '?', '?'], ['?', 'Warm', '?', '?', '?', '?']]
+ '''
+
+			
+			<!-- 3rd program CSV File -->
+			
+			
+sky,airtemp,Humidity,Wind,Water,forecast,Enjoy sport
+Sunny,Warm,Normal,Strong,Warm,Same,Yes
+Sunny,Warm,high,Strong,Warm,Same,Yes
+Rainy,Cold,high,Strong,Warm,Change,No
+Sunny,Warm,high,Strong,Cool,Change,Yes
+
+`
+function myFunction() {
+};
+
+      var tempInput = document.createElement("textarea");
+      tempInput.value = code;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Done with 3rd prgm!!");
+    }
+  </script>
+  
+  
+  
+					<!-- 4th program-->
+					
+	<button onclick="copyCode4()">4th prgm</button>
+
+  <script>
+    function copyCode4() {
+      var code = `"""Write a program to demonstrate the working of the decision tree based ID3 algorithm. Use an appropriate data set
+for building the decision tree and apply knowledge to classify a new sample """
+
+from pprint import pprint
+import pandas as pd
+from pandas import DataFrame
+
+# df_tennis = DataFrame.from
+df_tennis = pd.read_csv('ID3.csv')
+
+# df_tennis = DataFrame.from
+df_tennis = pd.read_csv('ID3.csv')
+
+
+# print(df_tennis)
+
+# Calculate the Entropy of given probability
+def entropy(probs):
+    import math
+    return sum([-prob * math.log(prob, 2) for prob in probs])
+
+
+def entropy_of_list(a_list):  # Entropy calculation of list of discrete val ues(YES / NO)
+    from collections import Counter
+    cnt = Counter(x for x in a_list)
+    print("No and Yes Classes:", a_list.name, cnt)
+    num_instances = len(a_list) * 1.0
+    probs = [x / num_instances for x in cnt.values()]
+    return entropy(probs)  # Call Entropy:
+
+
+# The initial entropy of the YES/NO attribute for our dataset.
+# print(df_tennis['PlayTennis'])
+total_entropy = entropy_of_list(df_tennis['PlayTennis'])
+print("Entropy of given PlayTennis Data Set:", total_entropy)
+
+
+def information_gain(df, split_attribute_name, target_attribute_name, trace=0):
+    print("Information Gain Calculation of ", split_attribute_name)
+    df_split = df.groupby(split_attribute_name)
+    '''
+ Takes a DataFrame of attributes,and quantifies the entropy of a target
+ attribute after performing a split along the values of another attribute.
+ '''  # print(df_split.groups)
+    for name, group in df_split:
+        print(name)
+        print(group)
+    # Calculate Entropy for Target Attribute, as well as
+    # Proportion of Obs in Each Data-Split
+    nobs = len(df.index) * 1.0
+    # print("NOBS",nobs)
+    df_agg_ent = df_split.agg({target_attribute_name: [entropy_of_list, lambda x: len(x) / nobs]})[
+        target_attribute_name]
+    # print("FAGGED",df_agg_ent)
+    df_agg_ent.columns = ['Entropy', 'PropObservations']
+    # if traced: # helps understand what fxn is doing:
+    # Calculate Information Gain:
+    new_entropy = sum(df_agg_ent['Entropy'] * df_agg_ent['PropObservations'])
+    old_entropy = entropy_of_list(df[target_attribute_name])
+    return old_entropy - new_entropy
+
+
+# print('Info-gain for Outlook is :'+str( information_gain(df_tennis, 'Outlook', 'PlayTennis')),"\n")
+# print('\n Info-gain for Humidity is: ' + str( information_gain(df_tennis,'Humidity', 'PlayTennis')),"\n")
+# print('\n Info-gain for Wind is:' + str( information_gain(df_tennis, 'Wind', 'PlayTennis')),"\n")
+# print('\n Info-gain for Temperature is:' + str( information_gain(df_tennis, 'Temperature','PlayTennis')),"\n")
+
+
+def id3(df, target_attribute_name, attribute_names, default_class=None):  # Tally target attribute
+    from collections import Counter
+    cnt = Counter(x for x in df[target_attribute_name])  # class of YES /NO
+    # First check: Is this split of the dataset homogeneous?
+    if len(cnt) == 1:
+        return next(iter(cnt))
+    # Second check: Is this split of the dataset empty?
+    # if yes, return a default value
+    elif df.empty or (not attribute_names):
+        return default_class
+        # Otherwise: This dataset is ready to be divvied up!
+    else:
+        # [index_of_max] # most common value  of  target  attribute in dataset
+        default_class = max(cnt.keys())
+        # Choose Best Attribute to split on:
+        gainz = [information_gain(df, attr, target_attribute_name)
+                 for attr in attribute_names]
+        index_of_max = gainz.index(max(gainz))
+        best_attr = attribute_names[index_of_max]
+        # Create an empty tree, to be populated in a moment
+        tree = {best_attr: {}}
+        remaining_attribute_names = [
+            i for i in attribute_names if i != best_attr]
+        # Split dataset
+        # On each split, recursively call this algorithm.
+        # populate the empty tree with subtrees, which
+        # are the result of the recursive call
+        for attr_val, data_subset in df.groupby(best_attr):
+            subtree = id3(data_subset, target_attribute_name,
+                          remaining_attribute_names, default_class)
+            tree[best_attr][attr_val] = subtree
+        return tree
+
+
+# Predicting Attributes
+attribute_names = list(df_tennis.columns)
+print("List of Attributes:", attribute_names)
+attribute_names.remove('PlayTennis')  # Remove the class attribute
+print("Predicting Attributes:", attribute_names)
+
+# Tree Construction
+
+tree = id3(df_tennis, 'PlayTennis', attribute_names)
+print("\n\nThe Resultant Decision Tree is :\n")
+pprint(tree)
+
+
+# Classification Accuracy
+def classify(instance, tree, default=None):
+    attribute = next(iter(tree))  # tree.keys()[0]
+    if instance[attribute] in tree[attribute].keys():
+        result = tree[attribute][instance[attribute]]
+        if isinstance(result, dict):  # this is a tree, delve deeper
+            return classify(instance, result)
+        else:
+            return result  # this is a label
+    else:
+        return default
+
+
+df_tennis['predicted'] = df_tennis.apply(classify, axis=1, args=(tree, 'No'))
+# classify func allows for a default arg: when tree doesn't have answered for a particular
+# combination of attribute-values, we can use 'no' as the default guess
+print('Accuracy is:' + str(sum(df_tennis['PlayTennis'] ==
+      df_tennis['predicted']) / (1.0 * len(df_tennis.index))))
+df_tennis[['PlayTennis', 'predicted']]
+
+# Classification Accuracy: Training/Testing Set training_data = df_tennis.iloc[1:-4] # all but last thousand
+# instances test_data = df_tennis.iloc[-4:] # just the last thousand train_tree = id3(training_data, 'PlayTennis',
+# attribute_names) test_data['predicted2'] = test_data.loc(classify,axis=1,args=(train_tree,'Yes') ) # <----
+# train_data tree print ('\n\n Accuracy is : ' + str( sum(test_data['PlayTennis']==test_data['predicted2'] ) / (
+# 1.0*len(test_data.index)) ))
+
+########################################################################################################################
+# OUTPUT:
+# Ignore single quotes at beginning and end
+########################################################################################################################
+
+'''No and Yes Classes: PlayTennis Counter({'yes': 9, 'no': 5})
+Entropy of given PlayTennis Data Set: 0.9402859586706309
+List of Attributes: ['Outlook', 'Temperature', 'Humidity', 'Wind', 'PlayTennis']
+Predicting Attributes: ['Outlook', 'Temperature', 'Humidity', 'Wind']
+Information Gain Calculation of  Outlook
+overcast
+     Outlook Temperature Humidity    Wind PlayTennis
+2   overcast         hot     high    weak        yes
+6   overcast        cool   normal  strong        yes
+11  overcast        mild     high  strong        yes
+12  overcast         hot   normal    weak        yes
+rain
+   Outlook Temperature Humidity    Wind PlayTennis
+3     rain        mild     high    weak        yes
+4     rain        cool   normal    weak        yes
+5     rain        cool   normal  strong         no
+9     rain        mild   normal    weak        yes
+13    rain        mild     high  strong         no
+sunny
+   Outlook Temperature Humidity    Wind PlayTennis
+0    sunny         hot     high    weak         no
+1    sunny         hot     high  strong         no
+7    sunny        mild     high    weak         no
+8    sunny        cool   normal    weak        yes
+10   sunny        mild   normal  strong        yes
+No and Yes Classes: PlayTennis Counter({'yes': 4})
+No and Yes Classes: PlayTennis Counter({'yes': 3, 'no': 2})
+No and Yes Classes: PlayTennis Counter({'no': 3, 'yes': 2})
+No and Yes Classes: PlayTennis Counter({'yes': 9, 'no': 5})
+Information Gain Calculation of  Temperature
+cool
+    Outlook Temperature Humidity    Wind PlayTennis
+4      rain        cool   normal    weak        yes
+5      rain        cool   normal  strong         no
+6  overcast        cool   normal  strong        yes
+8     sunny        cool   normal    weak        yes
+hot
+     Outlook Temperature Humidity    Wind PlayTennis
+0      sunny         hot     high    weak         no
+1      sunny         hot     high  strong         no
+2   overcast         hot     high    weak        yes
+12  overcast         hot   normal    weak        yes
+mild
+     Outlook Temperature Humidity    Wind PlayTennis
+3       rain        mild     high    weak        yes
+7      sunny        mild     high    weak         no
+9       rain        mild   normal    weak        yes
+10     sunny        mild   normal  strong        yes
+11  overcast        mild     high  strong        yes
+13      rain        mild     high  strong         no
+No and Yes Classes: PlayTennis Counter({'yes': 3, 'no': 1})
+No and Yes Classes: PlayTennis Counter({'no': 2, 'yes': 2})
+No and Yes Classes: PlayTennis Counter({'yes': 4, 'no': 2})
+No and Yes Classes: PlayTennis Counter({'yes': 9, 'no': 5})
+Information Gain Calculation of  Humidity
+high
+     Outlook Temperature Humidity    Wind PlayTennis
+0      sunny         hot     high    weak         no
+1      sunny         hot     high  strong         no
+2   overcast         hot     high    weak        yes
+3       rain        mild     high    weak        yes
+7      sunny        mild     high    weak         no
+11  overcast        mild     high  strong        yes
+13      rain        mild     high  strong         no
+normal
+     Outlook Temperature Humidity    Wind PlayTennis
+4       rain        cool   normal    weak        yes
+5       rain        cool   normal  strong         no
+6   overcast        cool   normal  strong        yes
+8      sunny        cool   normal    weak        yes
+9       rain        mild   normal    weak        yes
+10     sunny        mild   normal  strong        yes
+12  overcast         hot   normal    weak        yes
+No and Yes Classes: PlayTennis Counter({'no': 4, 'yes': 3})
+No and Yes Classes: PlayTennis Counter({'yes': 6, 'no': 1})
+No and Yes Classes: PlayTennis Counter({'yes': 9, 'no': 5})
+Information Gain Calculation of  Wind
+strong
+     Outlook Temperature Humidity    Wind PlayTennis
+1      sunny         hot     high  strong         no
+5       rain        cool   normal  strong         no
+6   overcast        cool   normal  strong        yes
+10     sunny        mild   normal  strong        yes
+11  overcast        mild     high  strong        yes
+13      rain        mild     high  strong         no
+weak
+     Outlook Temperature Humidity  Wind PlayTennis
+0      sunny         hot     high  weak         no
+2   overcast         hot     high  weak        yes
+3       rain        mild     high  weak        yes
+4       rain        cool   normal  weak        yes
+7      sunny        mild     high  weak         no
+8      sunny        cool   normal  weak        yes
+9       rain        mild   normal  weak        yes
+12  overcast         hot   normal  weak        yes
+No and Yes Classes: PlayTennis Counter({'no': 3, 'yes': 3})
+No and Yes Classes: PlayTennis Counter({'yes': 6, 'no': 2})
+No and Yes Classes: PlayTennis Counter({'yes': 9, 'no': 5})
+Information Gain Calculation of  Temperature
+cool
+  Outlook Temperature Humidity    Wind PlayTennis
+4    rain        cool   normal    weak        yes
+5    rain        cool   normal  strong         no
+mild
+   Outlook Temperature Humidity    Wind PlayTennis
+3     rain        mild     high    weak        yes
+9     rain        mild   normal    weak        yes
+13    rain        mild     high  strong         no
+No and Yes Classes: PlayTennis Counter({'yes': 1, 'no': 1})
+No and Yes Classes: PlayTennis Counter({'yes': 2, 'no': 1})
+No and Yes Classes: PlayTennis Counter({'yes': 3, 'no': 2})
+Information Gain Calculation of  Humidity
+high
+   Outlook Temperature Humidity    Wind PlayTennis
+3     rain        mild     high    weak        yes
+13    rain        mild     high  strong         no
+normal
+  Outlook Temperature Humidity    Wind PlayTennis
+4    rain        cool   normal    weak        yes
+5    rain        cool   normal  strong         no
+9    rain        mild   normal    weak        yes
+No and Yes Classes: PlayTennis Counter({'yes': 1, 'no': 1})
+No and Yes Classes: PlayTennis Counter({'yes': 2, 'no': 1})
+No and Yes Classes: PlayTennis Counter({'yes': 3, 'no': 2})
+Information Gain Calculation of  Wind
+strong
+   Outlook Temperature Humidity    Wind PlayTennis
+5     rain        cool   normal  strong         no
+13    rain        mild     high  strong         no
+weak
+  Outlook Temperature Humidity  Wind PlayTennis
+3    rain        mild     high  weak        yes
+4    rain        cool   normal  weak        yes
+9    rain        mild   normal  weak        yes
+No and Yes Classes: PlayTennis Counter({'no': 2})
+No and Yes Classes: PlayTennis Counter({'yes': 3})
+No and Yes Classes: PlayTennis Counter({'yes': 3, 'no': 2})
+Information Gain Calculation of  Temperature
+cool
+  Outlook Temperature Humidity  Wind PlayTennis
+8   sunny        cool   normal  weak        yes
+hot
+  Outlook Temperature Humidity    Wind PlayTennis
+0   sunny         hot     high    weak         no
+1   sunny         hot     high  strong         no
+mild
+   Outlook Temperature Humidity    Wind PlayTennis
+7    sunny        mild     high    weak         no
+10   sunny        mild   normal  strong        yes
+No and Yes Classes: PlayTennis Counter({'yes': 1})
+No and Yes Classes: PlayTennis Counter({'no': 2})
+No and Yes Classes: PlayTennis Counter({'no': 1, 'yes': 1})
+No and Yes Classes: PlayTennis Counter({'no': 3, 'yes': 2})
+Information Gain Calculation of  Humidity
+high
+  Outlook Temperature Humidity    Wind PlayTennis
+0   sunny         hot     high    weak         no
+1   sunny         hot     high  strong         no
+7   sunny        mild     high    weak         no
+normal
+   Outlook Temperature Humidity    Wind PlayTennis
+8    sunny        cool   normal    weak        yes
+10   sunny        mild   normal  strong        yes
+No and Yes Classes: PlayTennis Counter({'no': 3})
+No and Yes Classes: PlayTennis Counter({'yes': 2})
+No and Yes Classes: PlayTennis Counter({'no': 3, 'yes': 2})
+Information Gain Calculation of  Wind
+strong
+   Outlook Temperature Humidity    Wind PlayTennis
+1    sunny         hot     high  strong         no
+10   sunny        mild   normal  strong        yes
+weak
+  Outlook Temperature Humidity  Wind PlayTennis
+0   sunny         hot     high  weak         no
+7   sunny        mild     high  weak         no
+8   sunny        cool   normal  weak        yes
+No and Yes Classes: PlayTennis Counter({'no': 1, 'yes': 1})
+No and Yes Classes: PlayTennis Counter({'no': 2, 'yes': 1})
+No and Yes Classes: PlayTennis Counter({'no': 3, 'yes': 2})
+
+
+The Resultant Decision Tree is :
+
+{'Outlook': {'overcast': 'yes',
+             'rain': {'Wind': {'strong': 'no', 'weak': 'yes'}},
+             'sunny': {'Humidity': {'high': 'no', 'normal': 'yes'}}}}
+Accuracy is:1.0'''
+
+
+		<!-- 4th program CSV File -->
+					
+					
+					
+Outlook,Temperature,Humidity,Wind,PlayTennis
+sunny,hot,high,weak,no
+sunny,hot,high,strong,no
+overcast,hot,high,weak,yes
+rain,mild,high,weak,yes
+rain,cool,normal,weak,yes
+rain,cool,normal,strong,no
+overcast,cool,normal,strong,yes
+sunny,mild,high,weak,no
+sunny,cool,normal,weak,yes
+rain,mild,normal,weak,yes
+sunny,mild,normal,strong,yes
+overcast,mild,high,strong,yes
+overcast,hot,normal,weak,yes
+rain,mild,high,strong,no
+
+
+`
+function myFunction() {
+};
+
+      var tempInput = document.createElement("textarea");
+      tempInput.value = code;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Done with 4th prgm!!");
+    }
+  </script>
+  
+  
+  
+  
+				<!-- 5th program -->
+
+
+    <button onclick="copyCode5()">5th prgm</button>
+
+  <script>
+    function copyCode5() {
+      var code = `"""Build an Artificial Neural Network by implementing the Backpropagation algorithm and test the same using
+appropriate data sets """
+
+import numpy as np
+
+X = np.array(([2, 9], [1, 5], [3, 6]), dtype=float)
+y = np.array(([92], [86], [89]), dtype=float)
+X = X / np.amax(X, axis=0)  # maximum of X array longitudinally
+y = y / 100
+
+
+# Sigmoid Function
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+
+# Derivative of Sigmoid Function
+def derivatives_sigmoid(x):
+    return x * (1 - x)
+
+
+# Variable initialization
+epoch = 7000  # Setting training iterations
+lr = 0.1  # Setting learning rate
+inputlayer_neurons = 2  # number of features in data set
+hiddenlayer_neurons = 3  # number of hidden layers neurons
+output_neurons = 1  # number of neurons at output layer
+# weight and bias initialization
+wh = np.random.uniform(size=(inputlayer_neurons, hiddenlayer_neurons))
+bh = np.random.uniform(size=(1, hiddenlayer_neurons))
+wout = np.random.uniform(size=(hiddenlayer_neurons, output_neurons))
+bout = np.random.uniform(size=(1, output_neurons))
+# draws a random range of numbers uniformly of dim x*y
+for i in range(epoch):
+    # Forward Propogation
+    hinp1 = np.dot(X, wh)
+    hinp = hinp1 + bh
+    hlayer_act = sigmoid(hinp)
+    outinp1 = np.dot(hlayer_act, wout)
+    outinp = outinp1 + bout
+    output = sigmoid(outinp)
+    # Backpropagation
+    EO = y - output
+    outgrad = derivatives_sigmoid(output)
+    d_output = EO * outgrad
+    EH = d_output.dot(wout.T)
+    hiddengrad = derivatives_sigmoid(hlayer_act)
+    d_hiddenlayer = EH * hiddengrad
+    wout += hlayer_act.T.dot(d_output) * lr
+    # bout += np.sum(d_output, axis=0,keepdims=True) *lr
+    wh += X.T.dot(d_hiddenlayer) * lr
+    # bh += np.sum(d_hiddenlayer, axis=0,keepdims=True) *lr
+print("Input: \n" + str(X))
+print("Actual Output: \n" + str(y))
+print("Predicted Output: \n", output)
+
+########################################################################################################################
+# OUTPUT:
+# Ignore single quotes at beginning and end
+########################################################################################################################
+
+''''Input: 
+[[0.66666667 1.        ]
+ [0.33333333 0.55555556]
+ [1.         0.66666667]]
+Actual Output: 
+[[0.92]
+ [0.86]
+ [0.89]]
+Predicted Output: 
+ [[0.89613503]
+ [0.87647952]
+ [0.89699621]]
+'''
+`
+function myFunction() {
+};
+
+      var tempInput = document.createElement("textarea");
+      tempInput.value = code;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Done with 5th prgm!!");
+    }
+  </script>  
+  
+  
+  
+  
+					<!-- 6th program -->
+  
+  
+  
+  <button onclick="copyCode6()">6th prgm</button>
+
+  <script>
+    function copyCode6() {
+      var code = `"""Write a program to implement the naïve Bayesian classifier for a sample training data set stored as a .CSV file.
+Compute the accuracy of the classifier, considering few test data sets. """
+
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+import pandas as pd
+
+msg = pd.read_csv('NBC.csv', names=['message', 'label'])
+print("Total Instances of Dataset: ", msg.shape[0])
+msg['labelnum'] = msg.label.map({'pos': 1, 'neg': 0})
+
+X = msg.message
+y = msg.labelnum
+
+Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
+
+count_v = CountVectorizer()
+Xtrain_dm = count_v.fit_transform(Xtrain)
+Xtest_dm = count_v.transform(Xtest)
+
+df = pd.DataFrame(Xtrain_dm.toarray(), columns=count_v.get_feature_names())
+print(df[0:5])
+
+clf = MultinomialNB()
+clf.fit(Xtrain_dm, ytrain)
+pred = clf.predict(Xtest_dm)
+
+for doc, p in zip(Xtrain, pred):
+    p = 'pos' if p == 1 else 'neg'
+    print("%s -> %s" % (doc, p))
+
+print('Accuracy Metrics: \n')
+print('Accuracy: ', accuracy_score(ytest, pred))
+print('Recall: ', recall_score(ytest, pred))
+print('Precision: ', precision_score(ytest, pred))
+print('Confusion Matrix: \n', confusion_matrix(ytest, pred))
+
+########################################################################################################################
+# OUTPUT:
+# Ignore single quotes at beginning and end
+########################################################################################################################
+
+
+'''
+Total Instances of Dataset:  18
+   about  am  amazing  an  awesome  beers  ...  today  very  view  went  what  work
+0      0   0        0   1        1      0  ...      0     0     1     0     1     0
+1      0   0        0   0        0      0  ...      0     0     0     0     0     0
+2      0   0        0   0        0      0  ...      0     0     0     0     0     0
+3      0   0        0   0        0      0  ...      1     0     0     1     0     0
+4      0   0        0   1        1      0  ...      0     0     0     0     0     0
+
+[5 rows x 39 columns]
+What an awesome view -> pos
+I love to dance -> neg
+He is my sworn enemy -> pos
+I went to my enemy's house today -> pos
+This is an awesome place -> neg
+Accuracy Metrics: 
+
+Accuracy:  0.6
+Recall:  1.0
+Precision:  0.3333333333333333
+Confusion Matrix: 
+ [[2 2]
+ [0 1]]
+
+Process finished with exit code 0
+'''
+
+		<!-- 6th program CSV File -->
+						
+						
+I love this sandwich,pos
+This is an amazing place,pos
+I feel very good about these beers,pos
+This is my best work,pos
+What an awesome view,pos
+I do not like this restaurant,neg
+I am tired of this stuff,neg
+I can't deal with this,neg
+He is my sworn enemy,neg
+My boss is horrible,neg
+This is an awesome place,pos
+I do not like the taste of this juice,neg
+I love to dance,pos
+I am sick and tired of this place,neg
+What a great holiday,pos
+That is a bad locality to stay,neg
+We will have good fun tomorrow,pos
+I went to my enemy's house today,neg
+						
+						
+`
+function myFunction() {
+};
+
+      var tempInput = document.createElement("textarea");
+      tempInput.value = code;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Done with 6th prgm!!");
+    }
+  </script>
+  
+  
+				<!-- 7th program -->
+				
+				
+	<button onclick="copyCode7()">7th prgm</button>
+
+  <script>
+    function copyCode7() {
+      var code = `"""Apply EM algorithm to cluster a set of data stored in a .CSV file. Use the same data set for clustering using
+k-Means algorithm. Compare the results of these two algorithms and comment on the quality of clustering. You can add
+Java/Python ML library classes/API in the program """
+
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.cluster import KMeans
+from sklearn.mixture import GaussianMixture 
+import sklearn.metrics as sm
+import pandas as pd
+import numpy as np
+
+iris = datasets.load_iris()
+
+X = pd.DataFrame(iris.data)
+X.columns = ['Sepal_Length','Sepal_Width','Petal_Length','Petal_Width']
+Y = pd.DataFrame(iris.target)
+Y.columns = ['Targets']
+
+print(X)
+print(Y)
+colormap = np.array(['red', 'lime', 'black'])
+
+plt.subplot(1,2,1)
+plt.scatter(X.Petal_Length, X.Petal_Width, c=colormap[Y.Targets], s=40)
+plt.title('Real Clustering')
+
+model1 = KMeans(n_clusters=3)
+model1.fit(X)
+
+plt.subplot(1,2,2)
+plt.scatter(X.Petal_Length, X.Petal_Width, c=colormap[model1.labels_], s=40)
+plt.title('K Mean Clustering')
+plt.show()
+
+model2 = GaussianMixture(n_components=3) 
+model2.fit(X)
+
+plt.subplot(1,2,1)
+plt.scatter(X.Petal_Length, X.Petal_Width, c=colormap[model2.predict(X)], s=40)
+plt.title('EM Clustering')
+plt.show()
+
+print("Actual Target is:\n", iris.target)
+print("K Means:\n",model1.labels_)
+print("EM:\n",model2.predict(X))
+print("Accuracy of KMeans is ",sm.accuracy_score(Y,model1.labels_))
+print("Accuracy of EM is ",sm.accuracy_score(Y, model2.predict(X)))
+`
+function myFunction() {
+};
+
+      var tempInput = document.createElement("textarea");
+      tempInput.value = code;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Done with 7th prgm!!");
+    }
+  </script>
+  
+  
+  
+							<!-- 8th program -->
+  
+  
+	<button onclick="copyCode8()">8th prgm</button>
+
+  <script>
+    function copyCode8() {
+      var code = `"""Write a program to implement K-Nearest Neighbour algorithm to classify th iris data set, print both correct and
+writing prediction. Java/Python library classes can be used for this problem"""
+
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn import datasets
+
+iris = datasets.load_iris()
+iris_data = iris.data
+iris_labels = iris.target
+x_train, x_test, y_train, y_test = train_test_split(iris_data, iris_labels, test_size=0.20)
+classifier = KNeighborsClassifier(n_neighbors=5)
+classifier.fit(x_train, y_train)
+y_pred = classifier.predict(x_test)
+print('Confusion matrix is as follows')
+print(confusion_matrix(y_test, y_pred))
+print('Accuracy Metrics')
+print(classification_report(y_test, y_pred))
+
+########################################################################################################################
+# OUTPUT:
+# Ignore double quotes at beginning and end
+########################################################################################################################
+
+"""
+Confusion matrix is as follows
+[[10  0  0]
+ [ 0  6  0]
+ [ 0  2 12]]
+Accuracy Metrics
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00        10
+           1       0.75      1.00      0.86         6
+           2       1.00      0.86      0.92        14
+
+    accuracy                           0.93        30
+   macro avg       0.92      0.95      0.93        30
+weighted avg       0.95      0.93      0.94        30
+
+
+Process finished with exit code 0
+"""
+
+
+`
+function myFunction() {
+};
+
+      var tempInput = document.createElement("textarea");
+      tempInput.value = code;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Done with 8th prgm!!");
+    }
+  </script>
+  
+  
+					<!-- 9th program -->
+  
+  <button onclick="copyCode9()">9th prgm</button>
+
+  <script>
+    function copyCode9() {
+      var code = `"""Implement the non-parametric Locally Weighted Regression algorithm in order to fit data point’s .Select
+appropriate data set for your experiment and draw graphs """
+
+from math import ceil
+import numpy as np
+from scipy import linalg
+
+
+def lowess(x, y, f, iterations):
+    n = len(x)
+    r = int(ceil(f * n))
+    h = [np.sort(np.abs(x - x[i]))[r] for i in range(n)]
+    w = np.clip(np.abs((x[:, None] - x[None, :]) / h), 0.0, 1.0)
+    w = (1 - w ** 3) ** 3
+    yest = np.zeros(n)
+    delta = np.ones(n)
+    for iteration in range(iterations):
+        for i in range(n):
+            weights = delta * w[:, i]
+            b = np.array([np.sum(weights * y), np.sum(weights * y * x)])
+            A = np.array([[np.sum(weights), np.sum(weights * x)], [np.sum(weights * x), np.sum(weights * x * x)]])
+            beta = linalg.solve(A, b)
+            yest[i] = beta[0] + beta[1] * x[i]
+
+        residuals = y - yest
+        s = np.median(np.abs(residuals))
+        delta = np.clip(residuals / (6.0 * s), -1, 1)
+        delta = (1 - delta ** 2) ** 2
+
+    return yest
+
+
+import math
+
+n = 100
+x = np.linspace(0, 2 * math.pi, n)
+y = np.sin(x) + 0.3 * np.random.randn(n)
+f = 0.25
+iterations = 3
+yest = lowess(x, y, f, iterations)
+
+import matplotlib.pyplot as plt
+
+plt.plot(x, y, "r.")
+plt.show()
+plt.plot(x, yest, "b-")
+plt.show()
+
+
+`
+function myFunction() {
+};
+
+      var tempInput = document.createElement("textarea");
+      tempInput.value = code;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Done with 9th prgm!!");
+    }
+  </script>
+  
+  
+  
+  
+  
+  
+  
+</body>
+</html>
